@@ -1,0 +1,947 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "gpuType": "V28",
+      "authorship_tag": "ABX9TyN9NTm6hyzqfdDarkv24uXG",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    },
+    "accelerator": "TPU"
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/juberijuber/Pyspark-Actions-Transformation/blob/main/Big%20Data%20Analysis%20experiment%20using%20Pyspark%20RDD\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "BLn6HaB_swFP",
+        "outputId": "84dee97c-8d82-49eb-878c-804c88ce1b25"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting pyspark\n",
+            "  Downloading pyspark-3.5.2.tar.gz (317.3 MB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m317.3/317.3 MB\u001b[0m \u001b[31m3.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25h  Preparing metadata (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "Collecting py4j==0.10.9.7 (from pyspark)\n",
+            "  Downloading py4j-0.10.9.7-py2.py3-none-any.whl.metadata (1.5 kB)\n",
+            "Downloading py4j-0.10.9.7-py2.py3-none-any.whl (200 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m200.5/200.5 kB\u001b[0m \u001b[31m11.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hBuilding wheels for collected packages: pyspark\n",
+            "  Building wheel for pyspark (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for pyspark: filename=pyspark-3.5.2-py2.py3-none-any.whl size=317812365 sha256=530bfa29cf9fc9f0a2a2742650fa126cb1a880009f2937c34904921f4aff89f1\n",
+            "  Stored in directory: /root/.cache/pip/wheels/34/34/bd/03944534c44b677cd5859f248090daa9fb27b3c8f8e5f49574\n",
+            "Successfully built pyspark\n",
+            "Installing collected packages: py4j, pyspark\n",
+            "Successfully installed py4j-0.10.9.7 pyspark-3.5.2\n"
+          ]
+        }
+      ],
+      "source": [
+        "!pip install pyspark\n",
+        "from pyspark.sql import SparkSession\n",
+        "#\"local[2]\" means that Spark will run in local mode using 2 cores\n",
+        "#number in the square brackets [2] indicates the number of threads or cores that Spark will use on your local machine\n",
+        "spark = SparkSession.builder.master(\"local[6]\").appName(\"SparkByExamp1s.com\").getOrCreate()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Create RDD from parallelize\n",
+        "sc = spark.sparkContext\n",
+        "data = [10,11,12,13,14,15]\n",
+        "rdd=sc.parallelize(data)\n",
+        "print(rdd.count())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "BQrsvwZLwa9n",
+        "outputId": "b7366a11-2a1f-420a-d89e-2ef18cfe41bb"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "6\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "#Create RDD from parallelize\n",
+        "sc = spark.sparkContext\n",
+        "data = [10,11,12,13,14,15]\n",
+        "rdd=sc.parallelize(data)\n",
+        "print(rdd.collect())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "__lD_bf9whpO",
+        "outputId": "ab6e4a8f-6cd5-4393-f485-1fc714b3d58d"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[10, 11, 12, 13, 14, 15]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(rdd.first())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "mheSCBRNuGUN",
+        "outputId": "038b7b82-891a-4d66-c8ff-e1bc7cf9dc79"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "10\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark import SparkContext\n",
+        "#Create RDD from parallelize\n",
+        "spark =SparkContext.getOrCreate()\n",
+        "data = [10,11,12,13,14,15]\n",
+        "rdd=spark.parallelize(data)\n",
+        "print(rdd.take(4))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "UPolPNs1uWXe",
+        "outputId": "e049217e-30de-4dfd-c0a0-df0ba89250dd"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[10, 11, 12, 13]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark import SparkContext\n",
+        "#Create RDD from parallelize\n",
+        "spark =SparkContext.getOrCreate()\n",
+        "data = [10,11,12,13,14,15]\n",
+        "rdd=spark.parallelize(data)\n",
+        "#A lambda function is a small anonymous function.\n",
+        "\n",
+        "#A lambda function can take any number of arguments, but can only have one expression.\n",
+        "#lambda arguments : expression\n",
+        "print(rdd.reduce(lambda x, y : x + y))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "-ddDO3VKucc2",
+        "outputId": "68d2e1f6-737a-43be-c0ff-3573ab555159"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "75\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark import SparkContext\n",
+        "sc = SparkContext.getOrCreate()\n",
+        "\n",
+        "reduce_rdd = sc.parallelize([4,10,5,8,11])\n",
+        "print(reduce_rdd.reduce(lambda x, y : x + y))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "gTpzS7qsulP-",
+        "outputId": "92a1ac4c-01b1-4f7a-ad9a-2d154d6bf10c"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "38\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install pyspark\n",
+        "from pyspark import SparkContext\n",
+        "sc = SparkContext.getOrCreate()\n",
+        "save_rdd = sc.parallelize([99,88,77,44,55,66,33,22,11])\n",
+        "save_rdd.saveAsTextFile('file80.txt')"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "ahLQaHZqunSn",
+        "outputId": "1fc027e5-4893-4cc2-ac68-890c58a06901"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: pyspark in /usr/local/lib/python3.10/dist-packages (3.5.2)\n",
+            "Requirement already satisfied: py4j==0.10.9.7 in /usr/local/lib/python3.10/dist-packages (from pyspark) (0.10.9.7)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark import SparkContext\n",
+        "sc = SparkContext.getOrCreate()\n",
+        "save_rdd = sc.parallelize([99,88,77,44,55,66,33,22,11], numSlices=2)\n",
+        "save_rdd.saveAsTextFile('file19.txt')"
+      ],
+      "metadata": {
+        "id": "RysntQr5upG-"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark.sql import SparkSession\n",
+        "\n",
+        "# Initialize Spark session\n",
+        "spark = SparkSession.builder.master(\"local[2]\").appName(\"TakeSampleExample\").getOrCreate()\n",
+        "\n",
+        "# Create an RDD from a list of numbers\n",
+        "rdd = spark.sparkContext.parallelize([11, 12, 13, 14, 15, 16, 17, 18, 19, 10])\n",
+        "\n",
+        "# Sample 5 elements with replacement\n",
+        "#seed=42 is used to ensure the same random sample is produced every time\n",
+        "sample_with_replacement = rdd.takeSample(withReplacement=True, num=6, seed=42)\n",
+        "print(\"Sample with replacement:\", sample_with_replacement)\n",
+        "\n",
+        "# Sample 5 elements without replacement\n",
+        "sample_without_replacement = rdd.takeSample(withReplacement=False, num=6, seed=42)\n",
+        "print(\"Sample without replacement:\", sample_without_replacement)\n",
+        "\n",
+        "# Stop the Spark session\n",
+        "#spark.stop() stops the SparkSession. This is important to free up the resources that Spark was using.\n",
+        "spark.stop()\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "bVaBi-uyurZO",
+        "outputId": "acdeac61-37cd-4d02-88dd-1042a2a10313"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Sample with replacement: [17, 16, 15, 10, 18, 13]\n",
+            "Sample without replacement: [18, 14, 13, 19, 16, 17]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark.sql import SparkSession\n",
+        "\n",
+        "# Initialize Spark session\n",
+        "spark = SparkSession.builder.master(\"local[2]\").appName(\"TakeOrderedExample\").getOrCreate()\n",
+        "\n",
+        "# Create an RDD from a list of numbers\n",
+        "rdd = spark.sparkContext.parallelize([10, 4, 2, 7, 3, 6, 9, 8, 1, 5,11])\n",
+        "\n",
+        "# Get the smallest 5 elements (sorted in ascending order)\n",
+        "smallest_five = rdd.takeOrdered(5)\n",
+        "#takeOrdered is used to extract the top n elements from an RDD based on a specified order.\n",
+        "print(\"Smallest 5 elements:\", smallest_five)\n",
+        "\n",
+        "# Get the largest 5 elements (sorted in descending order)\n",
+        "largest_five = rdd.takeOrdered(5, key=lambda x: -x)\n",
+        "print(\"Largest 5 elements:\", largest_five)\n",
+        "\n",
+        "# Stop the Spark session\n",
+        "spark.stop()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "0U2kuflOutW2",
+        "outputId": "d5ae305b-a4f6-4cc0-dcd2-ae790471d24c"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Smallest 5 elements: [1, 2, 3, 4, 5]\n",
+            "Largest 5 elements: [11, 10, 9, 8, 7]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark.sql import SparkSession\n",
+        "\n",
+        "# Initialize Spark session\n",
+        "spark = SparkSession.builder.master(\"local[2]\").appName(\"SaveAsSequenceFileExample\").getOrCreate()\n",
+        "\n",
+        "# Create an RDD of key-value pairs\n",
+        "rdd = spark.sparkContext.parallelize([(\"key1\", 11), (\"key2\", 2), (\"key3\", 7)])\n",
+        "\n",
+        "# Save the RDD as a sequence file\n",
+        "rdd.saveAsSequenceFile(\"sequence_file-1\")\n",
+        "\n",
+        "# Stop the Spark session\n",
+        "spark.stop()\n"
+      ],
+      "metadata": {
+        "id": "7TLK4el9uu89"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "#Reading the Sequence File\n",
+        "# Initialize Spark session\n",
+        "spark = SparkSession.builder.master(\"local[2]\").appName(\"SaveAsSequenceFileExample\").getOrCreate()\n",
+        "spark.conf.set(\"dfs.checksum.enabled\", \"false\")#This line sets a\n",
+        "# Spark configuration to disable checksum validation for the file system.\n",
+        "rdd = spark.sparkContext.sequenceFile(\"sequence_file-1\")#for reading\n",
+        "rdd.collect()  # This will return the key-value pairs as a list of tuples"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "aUzgaB0EuxCF",
+        "outputId": "ee5bd096-9119-4783-dada-d7b9fe52cfb8"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[('key1', 11), ('key2', 2), ('key3', 7)]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 18
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark.sql import SparkSession\n",
+        "\n",
+        "# Initialize Spark session\n",
+        "spark = SparkSession.builder.master(\"local[2]\").appName(\"SaveAsPickleFileExample\").getOrCreate()\n",
+        "\n",
+        "# Create an RDD of tuples\n",
+        "rdd = spark.sparkContext.parallelize([(\"key1\", 50), (\"key2\", 60), (\"key3\", 70)])\n",
+        "\n",
+        "# Save the RDD as a pickle file\n",
+        "rdd.saveAsPickleFile(\"pickle-file1\")\n",
+        "\n",
+        "# Stop the Spark session\n",
+        "spark.stop()\n"
+      ],
+      "metadata": {
+        "id": "-2x_3Zm2u28G"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Initialize Spark session\n",
+        "spark = SparkSession.builder.master(\"local[2]\").appName(\"ReadPickleFileExample\").getOrCreate()\n",
+        "\n",
+        "# Read the pickle file into an RDD\n",
+        "rdd = spark.sparkContext.pickleFile(\"pickle-file1\")\n",
+        "print(rdd.collect())\n",
+        "#collect() gathers all the data\n",
+        "# from the distributed RDD across the cluster and returns it as a list to the driver node.\n",
+        "\n",
+        "# Stop the Spark session\n",
+        "spark.stop()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "qkSeXzNLu4IW",
+        "outputId": "1d333567-689a-4921-b505-ffae1c620120"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[('key1', 50), ('key2', 60), ('key3', 70)]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark.sql import SparkSession\n",
+        "\n",
+        "# Initialize Spark session\n",
+        "spark = SparkSession.builder.master(\"local[2]\").appName(\"CountByKeyExample\").getOrCreate()\n",
+        "\n",
+        "# Create an RDD of key-value pairs\n",
+        "rdd = spark.sparkContext.parallelize([(\"juber\", 34), (\"kanishk\", 37), (\"juber\", 35), (\"kanishk\", 37), (\"jittu\", 30)])\n",
+        "\n",
+        "# Count the occurrences of each key\n",
+        "countskey = rdd.countByKey()\n",
+        "countsVal = rdd.countByValue()\n",
+        "\n",
+        "# Print the result\n",
+        "print(countskey)\n",
+        "print(countsVal)\n",
+        "\n",
+        "# Stop the Spark session\n",
+        "spark.stop()\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "PJyKqtgovC-2",
+        "outputId": "aeb175a4-ac54-4b5a-c210-62baf4145b64"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "defaultdict(<class 'int'>, {'juber': 2, 'kanishk': 2, 'jittu': 1})\n",
+            "defaultdict(<class 'int'>, {('juber', 34): 1, ('kanishk', 37): 2, ('juber', 35): 1, ('jittu', 30): 1})\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark.sql import SparkSession\n",
+        "\n",
+        "# Initialize Spark session\n",
+        "spark = SparkSession.builder.master(\"local[2]\").appName(\"ForeachExample\").getOrCreate()\n",
+        "\n",
+        "# Create an RDD\n",
+        "rdd = spark.sparkContext.parallelize([10, 20, 30, 40, 50])\n",
+        "\n",
+        "for element in rdd.collect():\n",
+        "    print(f\"Element: {element}\")\n",
+        "\n",
+        "\n",
+        "# Stop the Spark session\n",
+        "spark.stop()\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "l8jfMD1yvE4W",
+        "outputId": "e47e93d1-32b9-405e-dd29-daef0bdb60c4"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Element: 10\n",
+            "Element: 20\n",
+            "Element: 30\n",
+            "Element: 40\n",
+            "Element: 50\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark.sql import SparkSession\n",
+        "\n",
+        "# Initialize Spark session\n",
+        "spark = SparkSession.builder.master(\"local[2]\").appName(\"ForeachExample\").getOrCreate()\n",
+        "\n",
+        "# Create an RDD\n",
+        "rdd = spark.sparkContext.parallelize([10, 20, 30, 40, 50])\n",
+        "\n",
+        "rdd.foreach(lambda x: print(f\"Element: {x}\"))\n",
+        "\n",
+        "# Stop the Spark session\n",
+        "spark.stop()\n"
+      ],
+      "metadata": {
+        "id": "4XF0nxwHvGJe"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Transformations in PySpark RDDs\n"
+      ],
+      "metadata": {
+        "id": "y0vWfPmm2F6i"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark import SparkContext\n",
+        "sc = SparkContext.getOrCreate()\n",
+        "filter_rdd = sc.parallelize([2, 3, 4, 5, 6, 7])\n",
+        "print(filter_rdd.filter(lambda x: x%2 == 0).collect())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "FdC1QaeUvH9G",
+        "outputId": "be81648a-3503-4c35-c74f-47417e45f277"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[2, 4, 6]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "filter_rdd_2 = sc.parallelize(['juber', 'jeyan', 'kanishk', 'jittu', 'kaarthi'])\n",
+        "print(filter_rdd_2.filter(lambda x: x.startswith('j')).collect())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "SSwrDPNXvJpO",
+        "outputId": "8b687352-c6a7-4271-a615-903d6f1dcfd1"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "['juber', 'jeyan', 'jittu']\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "union_inp = sc.parallelize([2,4,5,6,7,8,9])\n",
+        "union_rdd_1 = union_inp.filter(lambda x: x % 2 == 0)\n",
+        "union_rdd_2 = union_inp.filter(lambda x: x % 3 == 0)\n",
+        "print(union_rdd_1.union(union_rdd_2).collect())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "XSVEISF5vMt_",
+        "outputId": "760180ca-e7b2-422f-8d93-350edd7f0456"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[2, 4, 6, 8, 6, 9]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "inp = sc.parallelize([1,2,4,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20])\n",
+        "rdd_1 = inp.filter(lambda x: x % 2 == 0)\n",
+        "rdd_2 = inp.filter(lambda x: x % 3 == 0)\n",
+        "print(rdd_1.intersection(rdd_2).collect())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "9lGgpV85vUOG",
+        "outputId": "339dd3a6-79af-45ee-e390-26a9dc40e142"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[12, 6, 18]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "inp = sc.parallelize([1,2,4,5,6,7,8,9,10])\n",
+        "rdd_1 = inp.filter(lambda x: x % 2 == 0)\n",
+        "rdd_2 = inp.filter(lambda x: x % 3 == 0)\n",
+        "print(rdd_1.subtract(rdd_2).collect())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "EMQGh-YivV_u",
+        "outputId": "34d516d4-3ed6-4e96-dd19-479ca34200db"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[2, 4, 8, 10]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "flatmap_rdd = sc.parallelize([\"heeyyy welcome to kec\", \"but you dont desrve this college this is not a cog this is a school\"])\n",
+        "(flatmap_rdd.flatMap(lambda x: x.split(\" \")).collect())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "sG33YDHDvaqm",
+        "outputId": "7d7fec41-35cb-407f-9980-04678ac56289"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "['heeyyy',\n",
+              " 'welcome',\n",
+              " 'to',\n",
+              " 'kec',\n",
+              " 'but',\n",
+              " 'you',\n",
+              " 'dont',\n",
+              " 'desrve',\n",
+              " 'this',\n",
+              " 'college',\n",
+              " 'this',\n",
+              " 'is',\n",
+              " 'not',\n",
+              " 'a',\n",
+              " 'cog',\n",
+              " 'this',\n",
+              " 'is',\n",
+              " 'a',\n",
+              " 'school']"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 34
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark import SparkContext, SparkConf\n",
+        "\n",
+        "# Sample pair RDD with (key, value) pairs\n",
+        "pair_rdd = sc.parallelize([(1, 'Lion'), (2, 'Tiger'), (1, 'elephant'), (2, 'leopard')])\n",
+        "\n",
+        "# Function to append \" fruit\" to each value\n",
+        "def append_fruit(value):\n",
+        "    return value + \" Animal\"\n",
+        "\n",
+        "# Apply mapValues transformation\n",
+        "modified_rdd = pair_rdd.mapValues(append_fruit)\n",
+        "\n",
+        "# Collect the results and print the modified RDD\n",
+        "result = modified_rdd.collect()\n",
+        "print(result)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "QXXmVsc9vdW-",
+        "outputId": "5ae7499e-8d3e-4448-f594-18475eec1fe2"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[(1, 'Lion Animal'), (2, 'Tiger Animal'), (1, 'elephant Animal'), (2, 'leopard Animal')]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "marks = [('juber', 88), ('kaarthi', 92), ('kanishk', 83), ('jeyan', 93), ('jittu', 78)]\n",
+        "sc.parallelize(marks).collect()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "nWUKxnuSvfh2",
+        "outputId": "b7a9474e-a6f4-4de5-b1b9-22b7e220bdea"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[('juber', 88), ('kaarthi', 92), ('kanishk', 83), ('jeyan', 93), ('jittu', 78)]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 36
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "marks_rdd = sc.parallelize([('deepak', 25), ('dilip', 26), ('jeyann', 22), ('akshy', 29), ('jithuu', 22), ('juber', 23), ('swetha', 19), ('juber', 28), ('deepak', 26), ('juber', 22)])\n",
+        "print(marks_rdd.reduceByKey(lambda x, y: x + y).collect())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "mHeY0IHYvhee",
+        "outputId": "278ae5fd-3f6c-45c0-e05c-c19b3ef87182"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[('deepak', 51), ('juber', 73), ('jeyann', 22), ('akshy', 29), ('jithuu', 22), ('dilip', 26), ('swetha', 19)]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "marks_rdd = sc.parallelize([('deepak', 25), ('dilip', 26), ('jeyann', 22), ('akshy', 29), ('jithuu', 22), ('juber', 23), ('swetha', 19), ('juber', 28), ('deepak', 26), ('juber', 22)])\n",
+        "print(marks_rdd.sortByKey(ascending=True).collect())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "rsuKlVmXvjXG",
+        "outputId": "d6560a8e-de43-4934-d7c5-7b84397dc887"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[('akshy', 29), ('deepak', 25), ('deepak', 26), ('dilip', 26), ('jeyann', 22), ('jithuu', 22), ('juber', 23), ('juber', 28), ('juber', 22), ('swetha', 19)]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "marks_rdd = sc.parallelize([('deepak', 25), ('dilip', 26), ('jeyann', 22), ('akshy', 29), ('jithuu', 22), ('juber', 23), ('swetha', 19), ('juber', 28), ('deepak', 26), ('juber', 22)])\n",
+        "dict_rdd = marks_rdd.groupByKey().collect()\n",
+        "for key, value in dict_rdd:\n",
+        "    print(key, list(value))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "3jk2yOfbvlIW",
+        "outputId": "18a0eda0-4f08-4caa-ba31-9747f67c3ef1"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "deepak [25, 26]\n",
+            "juber [23, 28, 22]\n",
+            "jeyann [22]\n",
+            "akshy [29]\n",
+            "jithuu [22]\n",
+            "dilip [26]\n",
+            "swetha [19]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "marks_rdd = sc.parallelize([('deepak', 25), ('dilip', 26), ('jeyann', 22), ('akshy', 29), ('jithuu', 22), ('juber', 23), ('swetha', 19), ('juber', 28), ('deepak', 26), ('juber', 22)])\n",
+        "dict_rdd = marks_rdd.countByKey().items()\n",
+        "for key, value in dict_rdd:\n",
+        "    print(key, value)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "0wkBWxVAvnh-",
+        "outputId": "007d1f1b-7478-4ea6-a70a-7bd83ea0ab89"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "deepak 2\n",
+            "dilip 1\n",
+            "jeyann 1\n",
+            "akshy 1\n",
+            "jithuu 1\n",
+            "juber 3\n",
+            "swetha 1\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "o8Af6ZBuvqB-"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
